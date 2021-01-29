@@ -25,6 +25,7 @@ const int ledPin1 =  13;      // the number of the LED pin
 ezButton button2(3);           // the number of the pushbutton pin
 const int ledPin2 =  13;      // the number of the LED pin
 
+enum gameState {z, o, t};
 unsigned long  millisCOUNTER;
 int INTROLENGTH = 15000;
 
@@ -41,10 +42,10 @@ void setup() {
   button2.setDebounceTime(50); // set debounce time to 50 milliseconds
   button2.setCountMode(COUNT_RISING);
 
-  Serial.println("7 Segment Backpack Test");
+  Serial.println("Buttons Init");
 #endif
   matrix.begin(0x70);
-  Serial.println("Adafruit Sound Board!");
+  Serial.println("Matrix Init");
 
   ss.begin(9600);
 
@@ -52,25 +53,56 @@ void setup() {
     Serial.println("Not found");
     while (1);
   }
-  Serial.println("SFX board found");
-
+  Serial.println("SFX Board Init");
 }
 
 void loop() {
-
-  // try to print a number thats too long
-  matrix.print(10000, DEC);
-  matrix.writeDisplay();
-
-
   button1.loop(); // MUST call the loop() function first
   button2.loop(); // MUST call the loop() function first
   unsigned long count1 = button1.getCount();
   unsigned long count2 = button2.getCount();
+  button1.resetCount();
+  button2.resetCount();
   Serial.println(count1);
+  Serial.println(count2);
+  
+  while (1) {
+    switch (gameState()) {
+      case z: {
+          Serial.println("0");
+          button1.loop(); // MUST call the loop() function first
+          button2.loop();
 
+          //try to print a number thats too long (- - - -)
+          matrix.print(10000, DEC);
+          matrix.writeDisplay();
+          break;
+        }
 
+      case o: {
+          Serial.println("1");
+          
+          break;
+        }
 
-
+      case t: {
+          Serial.println("2");
+          break;
+        }
+        delay(1);
+    }
+  }
 
 }
+
+
+//ezButton()
+//setDebounceTime()
+//getState()
+//getStateRaw()
+//isPressed()
+//isReleased()
+//setCountMode()
+//getCount()
+//resetCount()
+//loop()
