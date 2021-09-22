@@ -25,7 +25,7 @@ const int ledPin1 =  13;      // the number of the LED pin
 ezButton button2(3);           // the number of the pushbutton pin
 const int ledPin2 =  13;      // the number of the LED pin
 
-enum gameState {z, o, t};
+int gameState = 0;
 unsigned long  millisCOUNTER;
 int INTROLENGTH = 15000;
 
@@ -65,10 +65,10 @@ void loop() {
   button2.resetCount();
   Serial.println(count1);
   Serial.println(count2);
-  
+
   while (1) {
-    switch (gameState()) {
-      case z: {
+    switch (gameState) {
+      case 0: {
           Serial.println("0");
           button1.loop(); // MUST call the loop() function first
           button2.loop();
@@ -76,16 +76,20 @@ void loop() {
           //try to print a number thats too long (- - - -)
           matrix.print(10000, DEC);
           matrix.writeDisplay();
+
+          gameState = 1;
+
           break;
         }
 
-      case o: {
+      case 1: {
           Serial.println("1");
-          
+          introstart = millis();
+          //sfx.playTrack("INTRO   OGG");
           break;
         }
 
-      case t: {
+      case 2: {
           Serial.println("2");
           break;
         }
